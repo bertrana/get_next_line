@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yjohns <yjohns@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/02 22:42:18 by yjohns            #+#    #+#             */
-/*   Updated: 2019/07/02 23:43:06 by yjohns           ###   ########.fr       */
+/*   Created: 2019/07/03 15:08:18 by yjohns            #+#    #+#             */
+/*   Updated: 2019/07/03 23:41:06 by yjohns           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE
-# define GET_NEXT_LINE
-//# include "libft/libft.h"
-# include <stdio.h>
-# include <stdlib.h>
-# define BUFF_SIZE 512
+#include "libft.h"
 
-typedef struct		s_list
+t_list	*ft_lstnew(void const *content, size_t content_size)
 {
-	void			*content;
-	size_t			content_size;
-	struct s_list	*next;
-}					t_list;
+	t_list	*new;
 
-#endif
+	new = malloc(sizeof(t_list));
+	new->content = content;
+	new->content_size = content_size;
+	new->next = NULL;
+	return (new);
+}
