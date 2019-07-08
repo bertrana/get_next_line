@@ -40,24 +40,33 @@ t_list	*ft_lstsearchfd(size_t fd, const t_list *start)
 	return (end);
 }
 
-//void	read_line(t_list *list, )
+char	*read_line(t_list *list, )
+{
+	int				num_read;
+	char			*tmp;
+
+	while ((num_read = read(fd, list->content, BUFF_SIZE)) > 0)
+	//проверить строку на \n и если нет,то считать повторно
+	{
+		tmp = (char *)(list->content);
+		tmp[num_read] = '\0';
+		while (*tmp)
+		{
+			if (*tmp == '\n')
+				return ()
+		}
+	}
+}
 
 int		get_next_line(const int fd, char **line)
 {
 	const t_list	*list = NULL;
-	int				num_read;
-	char			*tmp;
 
 	if (fd < 0 || !line || read(fd, NULL, 0) == -1)
 		return (-1);
 	list = ft_lstsearchfd(fd, list);
-	while ((num_read = read(fd, list->content, BUFF_SIZE)) > 0)
-		//проверить строку на \n и если нет,то считать повторно
-	{
-		tmp = (char *)(list->content);
-		tmp[num_read] = '\0';
-	}
 	//когда нашли \n или \0 
+	if (*line = (char *)malloc(sizeof(char *)));
 	//записать в Line отрезок строки до \n
 	return (0);
 }
