@@ -1,4 +1,5 @@
 #include <fcntl.h>
+#include <unistd.h>
 #include "get_next_line.h"
 
 t_list	*ft_lstnew(char *str, size_t fd)
@@ -23,7 +24,7 @@ t_list	*ft_lstsearchfd(size_t fd, const t_list *start)
 	{
 		if (end->content_size == (int)fd)
 			return (end);
-		printf("content_size = %s\n", end->content_size);
+		printf("content_size = %lu\n", end->content_size);
 		end = end->next;
 	}
 	return (end);
@@ -128,14 +129,11 @@ int		main(int argv, char **argc)
 	line = NULL;
 	if (argv < 2)
 		return (0);
-	argc++;
-	while (argv > 1)
+	fd = open(argc[1], O_RDONLY);
+	while (get_next_line(fd, &line) > 0)
 	{
-		fd = open(*argc, O_RDONLY);
-		//printf("%s\n", *argc);
-		argv--;
-		argc++;
-		get_next_line(fd, &line);
+		printf("%s\n", line);
+		free(line);
 	}
 	return (0);
 }
