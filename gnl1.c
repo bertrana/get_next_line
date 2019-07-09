@@ -44,8 +44,12 @@ size_t	ft_strlen(char const *str)
 
 char	*ft_strchr(const char *str, int symbol)
 {
+	printf("ppppp\n");
+	if (!str)
+		return (NULL);
 	while (*str && *str != symbol)
 		str++;
+	printf("find \\n\n");
 	if (*str == symbol)
 		return ((char *)str);
 	else
@@ -95,14 +99,21 @@ int		get_next_line(const int fd, char **line)
 		return(0);
 	str = (char *)malloc(BUFF_SIZE + 1);
 	//пока в структуре не будет абзаца, то считываем буфер
+	printf("myau\n");
 	while (!(str = ft_strchr(lst->content, '\n')))
 	{
 		if (!(was_read = read(fd, str, BUFF_SIZE)))
 			return (-1);
 		str[was_read] = '\0';
-		lst->content = ft_strjoin(lst->content, str);
+		printf("str = %s\n", str);
+		//lst->content = ft_strjoin(lst->content, str);
 		//ft_search_n(lst, line);
 		printf("2 lst->content = %s\n", lst->content);
+	}
+	printf("%c\n", *str);
+	if (*str == '\n')
+	{
+		printf("yes\n");
 	}
 	free(str);
 	return (0);
