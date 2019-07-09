@@ -29,6 +29,19 @@ t_list	*ft_lstsearchfd(size_t fd, const t_list *start)
 	return (end);
 }
 
+size_t	ft_strlen(char const *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (*str != '\0')
+	{
+		str++;
+		i++;
+	}
+	return (i);
+}
+
 char	*ft_strchr(const char *str, int symbol)
 {
 	while (*str && *str != symbol)
@@ -39,13 +52,37 @@ char	*ft_strchr(const char *str, int symbol)
 		return (NULL);
 }
 
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*str;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	str = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!str || !s1 || !s2)
+		return (NULL);
+	while (s1[i] != '\0')
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	while (s2[j] != '\0')
+	{
+		str[i++] = s2[j++];
+	}
+	str[i] = '\0';
+	return (str);
+}
+/*
 int		ft_search_n(t_list *lst, char **line)
 {
 
 	if ()
 	return (0);
 }
-
+*/
 int		get_next_line(const int fd, char **line)
 {
 	t_list	*lst = NULL;
@@ -57,12 +94,13 @@ int		get_next_line(const int fd, char **line)
 	if (!(lst = ft_lstsearchfd(fd, lst)))
 		return(0);
 	str = (char *)malloc(BUFF_SIZE + 1);
+	//пока в структуре не будет абзаца, то считываем буфер
 	while (!(str = ft_strchr(lst->content, '\n')))
 	{
 		if (!(was_read = read(fd, str, BUFF_SIZE)))
 			return (-1);
 		str[was_read] = '\0';
-		lst->content = str;
+		lst->content = ft_strjoin(lst->content, str);
 		//ft_search_n(lst, line);
 		printf("2 lst->content = %s\n", lst->content);
 	}
