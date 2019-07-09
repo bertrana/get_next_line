@@ -91,16 +91,34 @@ int		ft_search_n(t_list *lst, char **line)
 int		get_next_line(const int fd, char **line)
 {
 	t_list	*lst = NULL;
-	char			*str;
+	char			str[BUFF_SIZE + 1];// чтобы не возиться с очищением и выделением памяти
 	int				was_read;
 
 	if (fd < 0 || read(fd, NULL, 0) == -1 )//|| !line)
 		return (-1);
 	if (!(lst = ft_lstsearchfd(fd, lst)))
 		return(0);
-	str = (char *)malloc(BUFF_SIZE + 1);
 	//пока в структуре не будет абзаца, то считываем буфер
 	printf("myau\n");
+	was_read = 0;
+	str[BUFF_SIZE] = '\0';
+
+//	if (ft_strchr(lst->content, '\n') == NULL)
+//	{
+//		while((was_read = read(fd, str, BUFF_SIZE)) > 0)
+//		{
+//			str[was_read] = '\0';
+//			//ссклеиваем lst->content и str
+//			if (ft_strchr(str, '\n') != NULL)//проверяем есть ли в считанном куске \n
+//				break;// и считываем из файла снов
+//		}
+//	}
+//
+//	if (was_read == -1)
+//		return -1;
+//	//тут вырезаешь из лст->контента в line и потом укорачиваешь контент
+
+
 	while (!(str = ft_strchr(lst->content, '\n')))
 	{
 		if (!(was_read = read(fd, str, BUFF_SIZE)))
@@ -116,7 +134,6 @@ int		get_next_line(const int fd, char **line)
 	{
 		printf("yes\n");
 	}
-	free(str);
 	return (0);
 }
 
