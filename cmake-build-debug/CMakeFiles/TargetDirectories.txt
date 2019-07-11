@@ -1,0 +1,3 @@
+C:/1my_programs/get_next_line/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/1my_programs/get_next_line/cmake-build-debug/CMakeFiles/get_next_line.dir
+C:/1my_programs/get_next_line/cmake-build-debug/CMakeFiles/rebuild_cache.dir

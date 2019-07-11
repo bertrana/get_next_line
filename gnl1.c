@@ -24,7 +24,6 @@ t_list	*ft_lstsearchfd(size_t fd, const t_list *start)
 	{
 		if (end->content_size == (int)fd)
 			return (end);
-		printf("content_size = %lu\n", end->content_size);
 		end = end->next;
 	}
 	return (end);
@@ -47,12 +46,10 @@ size_t	ft_strlen(char const *str)
 
 char	*ft_strchr(const char *str, int symbol)
 {
-	printf("ppppp\n");
 	if (!str)
 		return (NULL);
 	while (*str && *str != symbol)
 		str++;
-	printf("find \\n\n");
 	if (*str == symbol)
 		return ((char *)str);
 	else
@@ -101,8 +98,6 @@ int		get_next_line(const int fd, char **line)
 		return (-1);
 	if (!(lst = ft_lstsearchfd(fd, lst)))
 		return(0);
-	//пока в структуре не будет абзаца, то считываем буфер
-	printf("myau\n");
 	was_read = 0;
 //	str[BUFF_SIZE] = '\0';
 
