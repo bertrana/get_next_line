@@ -35,6 +35,8 @@ size_t	ft_strlen(char const *str)
 	size_t	i;
 
 	i = 0;
+	if (!str)
+	    return (0);
 	while (*str != '\0')
 	{
 		str++;
@@ -66,14 +68,15 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	i = 0;
 	j = 0;
 	str = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (!str || !s1 || !s2)
+	if (!str || (!s1 && !s2))
 		return (NULL);
-	while (s1[i] != '\0')
-	{
-		str[i] = s1[i];
-		i++;
-	}
-	while (s2[j] != '\0')
+	if (s1)
+        while (s1[i] != '\0' && s1)
+        {
+            str[i] = s1[i];
+            i++;
+        }
+	while (s2[j] != '\0' && s2)
 	{
 		str[i++] = s2[j++];
 	}
@@ -90,7 +93,7 @@ int		ft_search_n(t_list *lst, char **line)
 */
 int		get_next_line(const int fd, char **line)
 {
-	t_list	*lst = NULL;
+	t_list			*lst = NULL;
 	char			str[BUFF_SIZE + 1];// чтобы не возиться с очищением и выделением памяти
 	int				was_read;
 
@@ -101,7 +104,7 @@ int		get_next_line(const int fd, char **line)
 	//пока в структуре не будет абзаца, то считываем буфер
 	printf("myau\n");
 	was_read = 0;
-	str[BUFF_SIZE] = '\0';
+//	str[BUFF_SIZE] = '\0';
 
 //	if (ft_strchr(lst->content, '\n') == NULL)
 //	{
@@ -118,14 +121,13 @@ int		get_next_line(const int fd, char **line)
 //		return -1;
 //	//тут вырезаешь из лст->контента в line и потом укорачиваешь контент
 
-
-	while (!(str = ft_strchr(lst->content, '\n')))
+	while (!(ft_strchr(lst->content, '\n')))
 	{
-		if (!(was_read = read(fd, str, BUFF_SIZE)))
+		if ((was_read = read(fd, str, BUFF_SIZE)) < 0)
 			return (-1);
 		str[was_read] = '\0';
 		printf("str = %s\n", str);
-		//lst->content = ft_strjoin(lst->content, str);
+		lst->content = ft_strjoin(lst->content, str);
 		//ft_search_n(lst, line);
 		printf("2 lst->content = %s\n", lst->content);
 	}
@@ -141,12 +143,14 @@ int		main(int argv, char **argc)
 {
 	int		fd;
 	char	*line;
+//	char    str[9] = "text.txt";
 
 	fd = 0;
 	line = NULL;
-	if (argv < 2)
-		return (0);
-	fd = open(argc[1], O_RDONLY);
+	//if (argv < 2)
+	//	return (0);
+
+	fd = open("C:\\1my_programs\\get_next_line\\README.md", O_RDONLY);
 	while (get_next_line(fd, &line) > 0)
 	{
 		printf("%s\n", line);
