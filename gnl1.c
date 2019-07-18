@@ -80,65 +80,71 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	str[i] = '\0';
 	return (str);
 }
-/*
-int		ft_search_n(t_list *lst, char **line)
-{
 
-	if ()
-	return (0);
+char	*ft_strsub(char const *s, unsigned int start, size_t len)
+{
+    char		*str;
+    size_t		i;
+
+    i = 0;
+    str = (char *)malloc(len + 1);
+    if (!str || !s || start > ft_strlen(s))
+        return (NULL);
+    while (s[start] != '\0' && len > i)
+    {
+        str[i] = s[start];
+        i++;
+        start++;
+    }
+    if (s[start] != '\0' && len != i)
+        return (NULL);
+    str[i] = '\0';
+    return (str);
 }
-*/
+
+int     ft_cut_cont(const t_list *lst, int was_read, char **line)
+{
+    char *str;
+    int i;
+
+    i = 0;
+    str = (char *)lst->content;
+    while (str[i] != '\n' && str[i])
+        i++;
+    if (was_read == 0)// || was_read < BUFF_SIZE)
+    {
+        *line = (char *)lst->content;
+    }
+    if (str[i] == '\n')
+        *line = ft_strsub((const char *)lst->content, 0, i);
+    return (1);
+}
+
 int		get_next_line(const int fd, char **line)
 {
-	t_list			*lst = NULL;
-	char			str[BUFF_SIZE + 1];// чтобы не возиться с очищением и выделением памяти
-	int				was_read;
+	static t_list	*lst = NULL;
+	char	        str[BUFF_SIZE + 1];// чтобы не возиться с очищением и выделением памяти
+	int	    	    was_read;
 
 	if (fd < 0 || read(fd, NULL, 0) == -1 )//|| !line)
 		return (-1);
 	if (!(lst = ft_lstsearchfd(fd, lst)))
 		return(0);
-	was_read = 0;
-//	str[BUFF_SIZE] = '\0';
-
-//	if (ft_strchr(lst->content, '\n') == NULL)
-//	{
-//		while((was_read = read(fd, str, BUFF_SIZE)) > 0)
-//		{
-//			str[was_read] = '\0';
-//			//ссклеиваем lst->content и str
-//			if (ft_strchr(str, '\n') != NULL)//проверяем есть ли в считанном куске \n
-//				break;// и считываем из файла снов
-//		}
-//	}
-//
-//	if (was_read == -1)
-//		return -1;
-//	//тут вырезаешь из лст->контента в line и потом укорачиваешь контент
-
+	was_read = BUFF_SIZE;
 	while (!(ft_strchr(lst->content, '\n')))
 	{
 		if ((was_read = read(fd, str, BUFF_SIZE)) < 0)
 			return (-1);
 		str[was_read] = '\0';
-		printf("str = %s\n", str);
 		lst->content = ft_strjoin(lst->content, str);
-		//ft_search_n(lst, line);
-		printf("2 lst->content = %s\n", lst->content);
 	}
-	printf("%c\n", *str);
-	if (*str == '\n')
-	{
-		printf("yes\n");
-	}
-	return (0);
+	return (ft_cut_cont(lst, was_read, line));
 }
 
 int		main(int argv, char **argc)
 {
 	int		fd;
 	char	*line;
-//	char    str[9] = "text.txt";
 
 	fd = 0;
 	line = NULL;
