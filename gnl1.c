@@ -102,24 +102,26 @@ char	*ft_strsub(char const *s, unsigned int start, size_t len)
     return (str);
 }
 
-int     ft_cut_cont(char *str, int was_read, char **line)
+int     ft_cut_cont(char **str, int was_read, char **line)
 {
     char *tmp;
     int i;
 
     i = 0;
-    while (str[i] != '\n' && str[i])
+    while ((*str)[i] != '\n' && (*str)[i])
         i++;
-    if (was_read == 0 && str[i] == '\0')// || was_read < BUFF_SIZE)
+    if (was_read == 0 && (*str)[i] == '\0')// || was_read < BUFF_SIZE)
     {
-        *line = str;
+        *line = *str;
+        return (0);
     }
-    if (str[i] == '\n')
+    if ((*str)[i] == '\n')
     {
-        *line = ft_strsub(str, 0, i);
-        tmp = ft_strsub(str, i + 1, ft_strlen(str) - i - 1);
-        free(str);
-        str = tmp;
+        if (!(*line = ft_strsub(*str, 0, i)) ||
+        	!(tmp = ft_strsub(*str, i + 1, ft_strlen(*str) - i - 1)))
+        	return (-1);
+        free(*str);
+        *str = tmp;
     }
     return (1);
 }
@@ -141,11 +143,12 @@ int		get_next_line(const int fd, char **line)
 		if ((was_read = read(fd, str, BUFF_SIZE)) < 0)
 			return (-1);
 		str[was_read] = '\0';
-		tmp = ft_strjoin(lst->content, str);
+		if (!(tmp = ft_strjoin(lst->content, str)))
+			return (-1);
 		free(lst->content);
 		lst->content = tmp;
 	}
-	return (ft_cut_cont((char *)lst->content, was_read, line));
+	return (ft_cut_cont(&(lst->content), was_read, line));
 }
 
 int		main(int argv, char **argc)
