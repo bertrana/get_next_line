@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <fcntl.h>
 
 t_list	*ft_lstsearchfd(size_t fd, const t_list *start)
 {
@@ -37,7 +36,7 @@ int     ft_cut_cont(char **str, int was_read, char **line)
 	i = 0;
 	while ((*str)[i] != '\n' && (*str)[i])
 		i++;
-	if (was_read == 0 && (*str)[i] == '\0')// || was_read < BUFF_SIZE)
+	if (was_read == 0 && (*str)[i] == '\0')
 	{
 		*line = *str;
 		return (0);
@@ -56,11 +55,11 @@ int     ft_cut_cont(char **str, int was_read, char **line)
 int		get_next_line(const int fd, char **line)
 {
 	static t_list	*lst = NULL;
-	char	        str[BUFF_SIZE + 1];// чтобы не возиться с очищением и выделением памяти
+	char	        str[BUFF_SIZE + 1];
 	int	    	    was_read;
 	char            *tmp;
 
-	if (fd < 0 || read(fd, NULL, 0) == -1 )//|| !line)
+	if (fd < 0 || read(fd, NULL, 0) == -1 )
 		return (-1);
 	if (!(lst = ft_lstsearchfd(fd, lst)))
 		return(0);

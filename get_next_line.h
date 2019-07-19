@@ -12,8 +12,8 @@
 
 #ifndef GET_NEXT_LINE
 # define GET_NEXT_LINE
-//# include "libft/libft.h"
-# include <stdio.h>
+# include "libft.h"
+# include <fcntl.h>
 # include <stdlib.h>
 # define BUFF_SIZE 1000000
 
