@@ -6,85 +6,74 @@
 /*   By: yjohns <yjohns@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 22:40:18 by yjohns            #+#    #+#             */
-/*   Updated: 2019/07/02 23:41:06 by yjohns           ###   ########.fr       */
+/*   Updated: 2019/07/19 23:41:06 by yjohns           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <fcntl.h>
 
-t_list	*ft_lstnew(char *str, int fd)
-{
-	t_list	*new;
-
-	new = malloc(sizeof(t_list));
-	new->content = str;
-	new->content_size = fd;
-	new->next = NULL;
-	return (new);
-}
-
 t_list	*ft_lstsearchfd(size_t fd, const t_list *start)
 {
 	t_list	*end;
 
+	if (start == NULL)
+		return (ft_lstnew(NULL, (size_t)fd));
 	end = (t_list *)start;
-	while (end)
+	while (end->next)
 	{
 		if (end->content_size == (int)fd)
 			return (end);
 		end = end->next;
 	}
-	if (end == NULL)
-		end = ft_lstnew(NULL, fd);
 	return (end);
 }
 
-char	*read_line(t_list *list, )
+int     ft_cut_cont(char **str, int was_read, char **line)
 {
-	int				num_read;
-	char			*tmp;
+	char *tmp;
+	int i;
 
-	while ((num_read = read(fd, list->content, BUFF_SIZE)) > 0)
-	//проверить строку на \n и если нет,то считать повторно
+	i = 0;
+	while ((*str)[i] != '\n' && (*str)[i])
+		i++;
+	if (was_read == 0 && (*str)[i] == '\0')// || was_read < BUFF_SIZE)
 	{
-		tmp = (char *)(list->content);
-		tmp[num_read] = '\0';
-		while (*tmp)
-		{
-			if (*tmp == '\n')
-				return ()
-		}
+		*line = *str;
+		return (0);
 	}
+	if ((*str)[i] == '\n')
+	{
+		if (!(*line = ft_strsub(*str, 0, i)) ||
+			!(tmp = ft_strsub(*str, i + 1, ft_strlen(*str) - i - 1)))
+			return (-1);
+		free(*str);
+		*str = tmp;
+	}
+	return (1);
 }
 
 int		get_next_line(const int fd, char **line)
 {
-	const t_list	*list = NULL;
+	static t_list	*lst = NULL;
+	char	        str[BUFF_SIZE + 1];// чтобы не возиться с очищением и выделением памяти
+	int	    	    was_read;
+	char            *tmp;
 
-	if (fd < 0 || !line || read(fd, NULL, 0) == -1)
+	if (fd < 0 || read(fd, NULL, 0) == -1 )//|| !line)
 		return (-1);
-	list = ft_lstsearchfd(fd, list);
-	//когда нашли \n или \0 
-	if (*line = (char *)malloc(sizeof(char *)));
-	//записать в Line отрезок строки до \n
-	return (0);
-}
-
-int		main(int argc, char **argv)
-{
-	char	*line;
-	int		fd;
-
-	if (argc == 1)
-		return (0);
-	while (argc > 1)
+	if (!(lst = ft_lstsearchfd(fd, lst)))
+		return(0);
+	was_read = BUFF_SIZE;
+	while (!(ft_strchr(lst->content, '\n')))
 	{
-		fd = open(*argv, O_RDONLY);
-		get_next_line(fd, &line);
-		printf("%s\n", line);
-		argv++;
-		argc--;
+		if ((was_read = read(fd, str, BUFF_SIZE)) < 0)
+			return (-1);
+		str[was_read] = '\0';
+		if (!(tmp = ft_strjoin(lst->content, str)))
+			return (-1);
+		free(lst->content);
+		lst->content = tmp;
 	}
-	return (0);
+	return (ft_cut_cont(&(lst->content), was_read, line));
 }
