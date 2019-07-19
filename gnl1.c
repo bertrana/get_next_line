@@ -102,21 +102,25 @@ char	*ft_strsub(char const *s, unsigned int start, size_t len)
     return (str);
 }
 
-int     ft_cut_cont(const t_list *lst, int was_read, char **line)
+int     ft_cut_cont(char *str, int was_read, char **line)
 {
-    char *str;
+    char *tmp;
     int i;
 
     i = 0;
-    str = (char *)lst->content;
     while (str[i] != '\n' && str[i])
         i++;
-    if (was_read == 0)// || was_read < BUFF_SIZE)
+    if (was_read == 0 && str[i] == '\0')// || was_read < BUFF_SIZE)
     {
-        *line = (char *)lst->content;
+        *line = str;
     }
     if (str[i] == '\n')
-        *line = ft_strsub((const char *)lst->content, 0, i);
+    {
+        *line = ft_strsub(str, 0, i);
+        tmp = ft_strsub(str, i + 1, ft_strlen(str) - i - 1);
+        free(str);
+        str = tmp;
+    }
     return (1);
 }
 
@@ -125,6 +129,7 @@ int		get_next_line(const int fd, char **line)
 	static t_list	*lst = NULL;
 	char	        str[BUFF_SIZE + 1];// чтобы не возиться с очищением и выделением памяти
 	int	    	    was_read;
+	char            *tmp;
 
 	if (fd < 0 || read(fd, NULL, 0) == -1 )//|| !line)
 		return (-1);
@@ -136,9 +141,11 @@ int		get_next_line(const int fd, char **line)
 		if ((was_read = read(fd, str, BUFF_SIZE)) < 0)
 			return (-1);
 		str[was_read] = '\0';
-		lst->content = ft_strjoin(lst->content, str);
+		tmp = ft_strjoin(lst->content, str);
+		free(lst->content);
+		lst->content = tmp;
 	}
-	return (ft_cut_cont(lst, was_read, line));
+	return (ft_cut_cont((char *)lst->content, was_read, line));
 }
 
 int		main(int argv, char **argc)
