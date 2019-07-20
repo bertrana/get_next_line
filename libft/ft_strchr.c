@@ -14,6 +14,8 @@
 
 char	*ft_strchr(const char *str, int symbol)
 {
+	if (!str)
+		return (NULL);
 	while (*str && *str != symbol)
 		str++;
 	if (*str == symbol)

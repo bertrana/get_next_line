@@ -15,13 +15,7 @@
 # include "libft.h"
 # include <fcntl.h>
 # include <stdlib.h>
+# include <unistd.h>
 # define BUFF_SIZE 1000000
-
-typedef struct		s_list
-{
-	char			*content;
-	size_t			content_size;
-	struct s_list	*next;
-}					t_list;
 
 #endif

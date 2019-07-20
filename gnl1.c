@@ -2,17 +2,6 @@
 #include <unistd.h>
 #include "get_next_line.h"
 
-t_list	*ft_lstnew(char *str, size_t fd)
-{
-	t_list	*new;
-
-	new = malloc(sizeof(t_list));
-	new->content = str;
-	new->content_size = fd;
-	new->next = NULL;
-	return (new);
-}
-
 t_list	*ft_lstsearchfd(size_t fd, const t_list *start)
 {
 	t_list	*end;
@@ -27,79 +16,6 @@ t_list	*ft_lstsearchfd(size_t fd, const t_list *start)
 		end = end->next;
 	}
 	return (end);
-}
-
-size_t	ft_strlen(char const *str)
-{
-	size_t	i;
-
-	i = 0;
-	if (!str)
-	    return (0);
-	while (*str != '\0')
-	{
-		str++;
-		i++;
-	}
-	return (i);
-}
-
-char	*ft_strchr(const char *str, int symbol)
-{
-	if (!str)
-		return (NULL);
-	while (*str && *str != symbol)
-		str++;
-	if (*str == symbol)
-		return ((char *)str);
-	else
-		return (NULL);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	char	*str;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	str = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (!str || (!s1 && !s2))
-		return (NULL);
-	if (s1)
-        while (s1[i] != '\0' && s1)
-        {
-            str[i] = s1[i];
-            i++;
-        }
-	while (s2[j] != '\0' && s2)
-	{
-		str[i++] = s2[j++];
-	}
-	str[i] = '\0';
-	return (str);
-}
-
-char	*ft_strsub(char const *s, unsigned int start, size_t len)
-{
-    char		*str;
-    size_t		i;
-
-    i = 0;
-    str = (char *)malloc(len + 1);
-    if (!str || !s || start > ft_strlen(s))
-        return (NULL);
-    while (s[start] != '\0' && len > i)
-    {
-        str[i] = s[start];
-        i++;
-        start++;
-    }
-    if (s[start] != '\0' && len != i)
-        return (NULL);
-    str[i] = '\0';
-    return (str);
 }
 
 int     ft_cut_cont(char **str, int was_read, char **line)

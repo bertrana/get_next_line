@@ -7,7 +7,7 @@
 #IncludeRegexTransform: 
 
 C:/1my_programs/get_next_line/get_next_line.h
-stdio.h
+fcntl.h
 -
 stdlib.h
 -
