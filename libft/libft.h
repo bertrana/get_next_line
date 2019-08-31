@@ -6,14 +6,15 @@
 /*   By: yjohns <yjohns@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/23 17:14:18 by yjohns            #+#    #+#             */
-/*   Updated: 2019/06/30 20:09:42 by yjohns           ###   ########.fr       */
+/*   Updated: 2019/08/28 17:53:54 by yjohns           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
-# include <string.h>
+# include <stdlib.h>
 # include <stdio.h>
+# include <unistd.h>
 
 typedef struct		s_list
 {
@@ -75,10 +76,14 @@ void				ft_putstr_fd(char const *s, int fd);
 void				ft_putendl_fd(char const *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
 t_list				*ft_lstnew(void const *content, size_t content_size);
-void				ft_ltdelone(t_list **alst, void (*del)(void *, size_t));
+void				ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
 void				ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void				ft_lstadd(t_list **alst, t_list *new);
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
-t_list				*fT_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
+t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
+int					ft_strnchr(const char *str, int symbol);
+t_list				*ft_lstradd(t_list *alst, t_list *new);
+int					ft_strlchr(const char *str, int symbol, int num_s);
+int					ft_lstlen(t_list *lst);
 
 #endif

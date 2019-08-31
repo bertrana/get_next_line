@@ -6,17 +6,25 @@
 
 #IncludeRegexTransform: 
 
-C:/1my_programs/get_next_line/get_next_line.h
+../libft/libft.h
+stdlib.h
+-
+stdio.h
+-
+unistd.h
+-
+
+/Users/yjohns/get_next_line/get_next_line.h
+libft.h
+/Users/yjohns/get_next_line/libft.h
 fcntl.h
 -
 stdlib.h
 -
-
-C:/1my_programs/get_next_line/gnl1.c
-fcntl.h
--
 unistd.h
 -
+
+/Users/yjohns/get_next_line/gnl1.c
 get_next_line.h
-C:/1my_programs/get_next_line/get_next_line.h
+/Users/yjohns/get_next_line/get_next_line.h
 

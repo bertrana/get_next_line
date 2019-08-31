@@ -6,7 +6,7 @@
 /*   By: yjohns <yjohns@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/23 10:38:03 by yjohns            #+#    #+#             */
-/*   Updated: 2019/06/29 12:28:27 by yjohns           ###   ########.fr       */
+/*   Updated: 2019/08/28 17:31:07 by yjohns           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ size_t	ft_strlen(char const *str)
 
 	i = 0;
 	if (!str)
-	    return (0);
+		return (0);
 	while (*str != '\0')
 	{
 		str++;

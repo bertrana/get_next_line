@@ -6,7 +6,7 @@
 /*   By: yjohns <yjohns@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 22:40:18 by yjohns            #+#    #+#             */
-/*   Updated: 2019/07/19 23:41:06 by yjohns           ###   ########.fr       */
+/*   Updated: 2019/08/30 14:07:04 by yjohns           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,20 @@ t_list	*ft_lstsearchfd(size_t fd, const t_list *start)
 	end = (t_list *)start;
 	while (end->next)
 	{
-		if (end->content_size == (int)fd)
+		if (end->content_size == fd)
 			return (end);
 		end = end->next;
 	}
 	return (end);
 }
 
-int     ft_cut_cont(char **str, int was_read, char **line)
+int		ft_cut_cont(void **vo, int was_read, char **line)
 {
-	char *tmp;
-	int i;
+	char	**str;
+	char	*tmp;
+	int		i;
 
+	str = (char **)vo;
 	i = 0;
 	while ((*str)[i] != '\n' && (*str)[i])
 		i++;
@@ -55,14 +57,14 @@ int     ft_cut_cont(char **str, int was_read, char **line)
 int		get_next_line(const int fd, char **line)
 {
 	static t_list	*lst = NULL;
-	char	        str[BUFF_SIZE + 1];
-	int	    	    was_read;
-	char            *tmp;
+	char			str[BUFF_SIZE + 1];
+	int				was_read;
+	char			*tmp;
 
-	if (fd < 0 || read(fd, NULL, 0) == -1 )
+	if (fd < 0 || read(fd, NULL, 0) == -1)
 		return (-1);
 	if (!(lst = ft_lstsearchfd(fd, lst)))
-		return(0);
+		return (0);
 	was_read = BUFF_SIZE;
 	while (!(ft_strchr(lst->content, '\n')))
 	{
