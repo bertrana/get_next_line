@@ -1,15 +1,33 @@
 #include "get_next_line.h"
 
-t_list	*ft_lstsearchfd(size_t fd, const t_list *start)
+/*
+ * Нужно аккуратно зафришить память при ошибках (где идет возврат из гнл -1):
+ * - проверить лист на инициализацию и только потом зафришить, а иначе только указатель обнулить
+ * - тмп тоже проверить на инициализацию и только потом зафришить
+ * - лайн проверить на нуль и только потом зафришить
+ *
+ * Сделать обнуление данных в случае, когда заканчивается чтение, но без обнуления лайна
+ * это вызов функции в ft_count при was_read == 0
+ */
+
+int     free_all(t_list **lst, char **line, char **tmp)
+{
+    if (lst !=)
+    return (-1);
+}
+
+t_list	*ft_lstsearchfd(const int fd, const t_list *start)
 {
 	t_list	*end;
 
+	if (fd < 0)
+	    return (NULL);
 	if (start == NULL)
 		return (ft_lstnew("", (size_t)fd));
 	end = (t_list *)start;
 	while (end->next)
 	{
-		if (end->content_size == fd)
+		if (end->content_size == (size_t)fd)
 			return (end);
 		end = end->next;
 	}
@@ -45,25 +63,25 @@ int		ft_cut_cont(void **vo, int was_read, char **line)
 int		gnl(const int fd, char **line)
 {
 	static t_list	*lst = NULL;
-	char	        str[BUFF_SIZE + 1];// чтобы не возиться с очищением и выделением памяти
+	char	        str[BUFF_SIZE + 1];
 	int	    	    was_read;
 	char            *tmp;
 
-	if (fd < 0) //|| read(fd, NULL, 0) == -1 )//|| !line)
-		return (-1);
 	if (!(lst = ft_lstsearchfd(fd, lst)))
-		return (0);
-    //lst = ft_lstsearchfd(fd, lst);
+		return (free_all(&lst, line, &tmp));
 	was_read = BUFF_SIZE;
 	while (!(ft_strchr(lst->content, '\n')))
 	{
 		if ((was_read = read(fd, str, BUFF_SIZE)) < 0)
 			return (-1);
-		str[was_read] = '\0';
+		if (was_read != 0)
+		    str[was_read] = '\0';
 		if (!(tmp = ft_strjoin(lst->content, str)))
 			return (-1);
 		//free(lst->content);
 		lst->content = tmp;
+		if (was_read == 0)
+		    break ;
 	}
 	return (ft_cut_cont(&(lst->content), was_read, line));
 }
@@ -72,17 +90,20 @@ int		main()//int argv, char **argc)
 {
 	int		fd;
 	char	*line;
+	int     i;
 
 	fd = 0;
 	line = NULL;
-	//if (argv < 2)
-	//	return (0);
-
-	fd = open("get_next_line.c", O_RDONLY);
-	while (gnl(fd, &line) > 0)
+	fd = open("/Users/yjohns/gnl_my_git/ab.c", O_RDONLY);
+	while ((i = gnl(fd, &line)) > 0)
 	{
 		printf("%s\n", line);
 		free(line);
 	}
+	if (i == 0)
+    {
+        printf("%s\n", line);
+        free(line);
+    }
 	return (0);
 }
