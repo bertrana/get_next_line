@@ -1,29 +1,18 @@
 #include "get_next_line.h"
 
-/*
- * Нужно аккуратно зафришить память при ошибках (где идет возврат из гнл -1):
- * - проверить лист на инициализацию и только потом зафришить, а иначе только указатель обнулить
- * - тмп тоже проверить на инициализацию и только потом зафришить
- * - лайн проверить на нуль и только потом зафришить
- *
- * Сделать обнуление данных в случае, когда заканчивается чтение, но без обнуления лайна
- * это вызов функции в ft_count при was_read == 0
- */
-
-int     free_all(t_list **lst, char **line, char **tmp)
-{
-    if (lst !=)
-    return (-1);
-}
-
 t_list	*ft_lstsearchfd(const int fd, const t_list *start)
 {
 	t_list	*end;
+	char	*str;
 
 	if (fd < 0)
 	    return (NULL);
 	if (start == NULL)
-		return (ft_lstnew("", (size_t)fd));
+	{
+		str = (char *)malloc(1);
+		str[0] = '\0';
+		return (ft_lstnew(str, (size_t) fd));
+	}
 	end = (t_list *)start;
 	while (end->next)
 	{
@@ -44,12 +33,12 @@ int		ft_cut_cont(void **vo, int was_read, char **line)
 	i = 0;
     while ((*str)[i] != '\n' && (*str)[i])
         i++;
-    if (was_read == 0 && (*str)[i] == '\0')// || was_read < BUFF_SIZE)
+    if (was_read < BUFF_SIZE && (*str)[i] == '\0')// конец файла
     {
         *line = *str;
         return (0);
     }
-    if ((*str)[i] == '\n')
+    if ((*str)[i] == '\n') //строка до абзаца
     {
         if (!(*line = ft_strsub(*str, 0, i)) ||
         	!(tmp = ft_strsub(*str, i + 1, ft_strlen(*str) - i - 1)))
@@ -66,9 +55,11 @@ int		gnl(const int fd, char **line)
 	char	        str[BUFF_SIZE + 1];
 	int	    	    was_read;
 	char            *tmp;
+	int             i;
 
+	i = 0;
 	if (!(lst = ft_lstsearchfd(fd, lst)))
-		return (free_all(&lst, line, &tmp));
+		return (-1);//free_all(&lst, line, &tmp));
 	was_read = BUFF_SIZE;
 	while (!(ft_strchr(lst->content, '\n')))
 	{
@@ -78,9 +69,9 @@ int		gnl(const int fd, char **line)
 		    str[was_read] = '\0';
 		if (!(tmp = ft_strjoin(lst->content, str)))
 			return (-1);
-		//free(lst->content);
+		free(lst->content);
 		lst->content = tmp;
-		if (was_read == 0)
+		if (was_read < BUFF_SIZE)
 		    break ;
 	}
 	return (ft_cut_cont(&(lst->content), was_read, line));
@@ -92,6 +83,20 @@ int		main()//int argv, char **argc)
 	char	*line;
 	int     i;
 
+	int		out;
+	int		p[2];
+	//int		gnl_ret;
+
+	fd = 1;
+	out = dup(fd);
+	pipe(p);
+	dup2(p[1], fd);
+	write(fd, "aaa", 3);
+	close(p[1]);
+	dup2(out, fd);
+	i = gnl(p[0], &line);
+
+/*
 	fd = 0;
 	line = NULL;
 	fd = open("/Users/yjohns/gnl_my_git/ab.c", O_RDONLY);
@@ -99,7 +104,7 @@ int		main()//int argv, char **argc)
 	{
 		printf("%s\n", line);
 		free(line);
-	}
+	}*/
 	if (i == 0)
     {
         printf("%s\n", line);
