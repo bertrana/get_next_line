@@ -22,5 +22,6 @@ t_list				*ft_lstradd(t_list *alst, t_list *new)
 	while (alst->next)
 		alst = alst->next;
 	alst->next = new;
+	new->next = NULL;
 	return (start);
 }

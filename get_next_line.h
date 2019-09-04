@@ -16,8 +16,11 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
-# define BUFF_SIZE 100
+# define BUFF_SIZE 128
+//# define FT_OPEN_MAX 1024
 
+t_list	*ft_lstsearchfd(const int fd, t_list *start);
+int		ft_cut_cont(void **vo, int was_read, char **line);
 int		get_next_line(const int fd, char **line);
 
 #endif
